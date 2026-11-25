@@ -1,0 +1,11 @@
+FROM node:26.13.1-alpine@sha256:6bd9ab43c0ec0190ca7b2d193906cb8b7edf6e7f4afa43ddeccd6452710bffb5
+WORKDIR /app
+RUN chown node:node /app
+USER node
+
+COPY --chown=node:node package.json package-lock.json ./
+RUN npm ci
+COPY --chown=node:node . .
+
+EXPOSE 3000
+CMD ["node", "node_modules/vite/bin/vite.js", "--host", "0.0.0.0"]

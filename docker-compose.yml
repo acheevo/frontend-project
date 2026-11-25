@@ -1,0 +1,28 @@
+services:
+  frontend:
+    build:
+      context: .
+      args:
+        VITE_APP_NAME: ${VITE_APP_NAME:-}
+    ports:
+      - "127.0.0.1:${PORT:-3000}:8080"
+    restart: unless-stopped
+
+  frontend-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    init: true
+    ports:
+      - "127.0.0.1:${PORT:-3000}:3000"
+    volumes:
+      - .:/app
+      - frontend_node_modules:/app/node_modules
+    environment:
+      VITE_APP_NAME: ${VITE_APP_NAME:-}
+      PORT: "3000"
+    profiles:
+      - dev
+
+volumes:
+  frontend_node_modules:
